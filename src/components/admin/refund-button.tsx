@@ -83,7 +83,7 @@ export function RefundButton({ order }: { order: any }) {
         try {
             const result = await proxyRefund(order.orderId)
             if (result.processed) {
-                toast.success(t('admin.orders.refundSuccess'))
+                toast.success(t('admin.orders.verifySuccessRefunded'))
             } else {
                 toast.info(t('admin.orders.refundProxyNotProcessed'))
                 setShowMarkDone(true)
