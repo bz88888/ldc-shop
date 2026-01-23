@@ -2,7 +2,7 @@ import { db } from "./index";
 import { products, cards, orders, settings, reviews, loginUsers, categories, userNotifications, wishlistItems, wishlistVotes } from "./schema";
 import { INFINITE_STOCK, RESERVATION_TTL_MS } from "@/lib/constants";
 import { eq, sql, desc, and, asc, gte, or, inArray, lte, lt } from "drizzle-orm";
-import { updateTag } from "next/cache";
+import { updateTag, revalidatePath } from "next/cache";
 import { cache } from "react";
 
 // Database initialization state
@@ -1794,6 +1794,17 @@ export async function cancelExpiredOrders(filters: { productId?: string; userId?
         try {
             updateTag('home:products');
             updateTag('home:product-categories');
+        } catch {
+            // best effort
+        }
+        try {
+            revalidatePath('/orders');
+            revalidatePath('/admin/orders');
+            for (const expired of candidates) {
+                if (expired.orderId) {
+                    revalidatePath(`/order/${expired.orderId}`);
+                }
+            }
         } catch {
             // best effort
         }
