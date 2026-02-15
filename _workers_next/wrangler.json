@@ -14,6 +14,7 @@
         {
             "binding": "DB",
             "database_name": "ldc-shop-next"
+            "database_id": "4811cfee-fa5f-4311-aa37-4e16758dd0e2"
         }
     ],
     "observability": {
